@@ -1,38 +1,28 @@
 #!/usr/bin/python3
+'''method that determines if all the boxes can be opened..
+'''
+
 
 def canUnlockAll(boxes):
-    if not boxes or len(boxes) == 0:
-        return False
+    '''
+    Prototype: def canUnlockAll(boxes)\
+    boxes is a list of lists
+    A key with the same number as a box\
+            opens that box\
+    You can assume all keys will be positive integers\
+        There can be keys that do not have boxes\
+    The first box boxes[0] is unlocked\
+    Return True if all boxes can be opened, else return False\
 
-    # Initialize a set to keep track of visited boxes
-    visited = set()
-    # Mark the first box as visited
-    visited.add(0)
-
-    # Create a stack to perform DFS
-    stack = [0]
-
-    while stack:
-        current_box = stack.pop()
-
-        # Check all keys in the current box
-        for key in boxes[current_box]:
-            # If the key corresponds to a box that hasn't been visited
-            if key < len(boxes) and key not in visited:
-                # Mark the box as visited and add it to the stack
-                visited.add(key)
-                stack.append(key)
-
-    # Check if all boxes have been visited
-    return len(visited) == len(boxes)
-
-# Test cases
-boxes1 = [[1], [2], [3], [4], []]
-print(canUnlockAll(boxes1))  # Output: True
-
-boxes2 = [[1, 4, 6], [2], [0, 4, 1], [5, 6, 2], [3], [4, 1], [6]]
-print(canUnlockAll(boxes2))  # Output: True
-
-boxes3 = [[1, 4], [2], [0, 4, 1], [3], [], [4, 1], [5, 6]]
-print(canUnlockAll(boxes3))  # Output: False
-
+    '''
+    n = len(boxes)
+    seen_boxes = set([0])
+    unseen_boxes = set(boxes[0]).difference(set([0]))
+    while len(unseen_boxes) > 0:
+        boxIdx = unseen_boxes.pop()
+        if not boxIdx or boxIdx >= n or boxIdx < 0:
+            continue
+        if boxIdx not in seen_boxes:
+            unseen_boxes = unseen_boxes.union(boxes[boxIdx])
+            seen_boxes.add(boxIdx)
+    return n == len(seen_boxes)
