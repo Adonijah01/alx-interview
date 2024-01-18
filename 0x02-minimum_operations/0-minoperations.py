@@ -1,38 +1,32 @@
 #!/usr/bin/python3
+'''minimum operations.
+'''
+
 
 def minOperations(n):
-    """
-    Calculates the fewest number of operations needed to get n H characters.
-
-    Args:
-    - n: an integer, the target number of H characters.
-
-    Returns:
-    - An integer, the minimum number of operations required.
-      If n is impossible to achieve, return 0.
-    """
-    if n <= 1:
+    if not isinstance(n, int):
         return 0
-
-    operations = 0
-    divisor = 2
-
-    while n > 1:
-        while n % divisor == 0:
-            operations += divisor
-            n //= divisor
-        divisor += 1
-
-    return operations
-
-if __name__ == "__main__":
-    # Test cases
-    n1 = 4
-    n2 = 12
-
-    result1 = minOperations(n1)
-    result2 = minOperations(n2)
-
-    print("Min # of operations to reach {} char: {}".format(n1, result1))
-    print("Min # of operations to reach {} char: {}".format(n2, result2))
-
+    ops_count = 0
+    clipboard = 0
+    done = 1
+    # print('H', end='')
+    while done < n:
+        if clipboard == 0:
+            # init (the first copy all and paste)
+            clipboard = done
+            done += clipboard
+            ops_count += 2
+            # print('-(11)->{}'.format('H' * done), end='')
+        elif n - done > 0 and (n - done) % done == 0:
+            # copy all and paste
+            clipboard = done
+            done += clipboard
+            ops_count += 2
+            # print('-(11)->{}'.format('H' * done), end='')
+        elif clipboard > 0:
+            # paste
+            done += clipboard
+            ops_count += 1
+            # print('-(01)->{}'.format('H' * done), end='')
+    # print('')
+    return ops_count
